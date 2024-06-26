@@ -1,10 +1,25 @@
 import tkinter as tk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
-root = tk.Tk()
+
+
+root = ttk.Window(themename='solar')
 root.title('DataBase')
-title_frame = tk.LabelFrame(root);
-title_frame.pack()
-title = tk.Label(title_frame, text='The Is Frontend Window')
-title.pack()
+root.minsize(200,100)
+frame = ttk.LabelFrame(root);
+frame.pack()
+
+def buttonClicked(event):
+    label = ttk.Label(frame, text='Hello, World !!')
+    label.pack()
+
+button = ttk.Button(frame, text='Click Me')
+button.pack()
+button.bind('<Enter>',buttonClicked)
+
+button = ttk.Button(frame, text='Click Me', bootstyle = LIGHT)
+button.pack()
+
 
 root.mainloop()

@@ -1,0 +1,92 @@
+// database
+datasource db {
+  provider = "cockroachdb"
+  url      = "postgresql://mrinal:J4_nb_r3rBkyodiACsmsaA@mrinal-9899.7tc.aws-eu-central-1.cockroachlabs.cloud:26257/database-management-system?sslmode=verify-full"
+}
+
+// generator
+generator client {
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+model Appoint {
+  id         BigInt   @id @default(autoincrement())
+  patient_id Patient  @relation(fields: [patientId], references: [id])
+  patientId  String
+  doctor_id  Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId   String
+  date       DateTime
+  status     Status   @default(Pending)
+}
+
+enum Status {
+  Pending
+  Completed
+  Ongoing
+  Delay
+}
+
+enum pStatus {
+  Completed
+  Pending
+}
+
+enum Specialist {
+  Physiotherepist
+  Cardiologist
+  Surgeon
+  Gynacologist
+  Psychatrist
+}
+
+enum Symptoms {
+  Headache
+  Stomachache
+  Fever
+  Dizziness
+  Nauseous
+  LowBP
+  HighBP
+  Sugar
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+model Doctor {
+  id          String       @id @default(uuid())
+  name        String
+  contact     BigInt
+  address     String
+  specialisst Specialist[]
+  timing      String
+  Appoint     Appoint[]
+  Billing     Billing[]
+}
+
+model Patient {
+  id       String     @id @default(uuid())
+  name     String
+  contact  BigInt
+  address  String
+  age      Int
+  symptoms Symptoms[]
+  gender   Gender
+  timing   String
+  Appoint  Appoint[]
+  Billing  Billing[]
+}
+
+model Billing {
+  id            String   @id @default(uuid())
+  patient_id    Patient  @relation(fields: [patientId], references: [id])
+  patientId     String
+  doctor_id     Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId      String
+  amount        Int
+  paymentStatus pStatus
+  date          DateTime
+}
